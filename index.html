@@ -1,22 +1,140 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Salmon Maps</title>
-    <style>
-      body {
-        margin: 0;
-        height: 100%;
-      }
+    <head>
+        <title>Salmon</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                margin: 0;
+                height: 100%;
+                overflow: hidden;
+                font-family: 'Helvetica', 'Arial', 'Sans';
+            }
+            .map {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .overlay {
+                display: block;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+            .overlay.failed {
+                background: repeating-linear-gradient(
+                    45deg,
+                    #fd4646,
+                    #fd4646 10px,
+                    #ff0000 10px,
+                    #ff0000 20px
+                );
+            }
+            .overlay .box {
+                display: block;
+                position: absolute;
+                width: 65%;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: white;
+                box-shadow: 0px 0px 10px #000000a8;
+                padding: 1em;
+            }
+            @media screen and (max-width: 768px) {
+                .overlay .box {
+                    width: 90%;
+                }
+            }
+            .overlay h1 {
+                margin: 0;
+            }
+            .overlay p {
+                margin-bottom: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <image src='images/salmon.png' class='map' style="display: none;" />
+        <div class="validation-age-failure overlay failed" style="display: none;" >
+            <div class="box">
+                <h1>❌ Access Denied</h1>
+                <p>
+                This site is for salmon only. You are too old to be a salmon.
+                <p>
+                Salmon usually only live to be 2 to 7 years old. Steelhead, which are special, have been known to get up to 11 years old!
+                <p>
+                If you are actually a salmon, please e-mail <a href="mailto:support@salmonmaps.org"/>support@salmonmaps.org</a> for access and CC: <a href="mailto:noreply@guinnessworldrecords.com">noreply@guinnessworldrecords.com</a> to secure your place in history.
+            </div>
+        </div>
+        <div class="validation overlay" style="display: none;" >
+            <div class="box">
+                <h1>⚠ Age Restriction</h1>
+                <p>
+                I am this many years old (round up):
+                <select id="age-box">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18" selected>18+</option>
+                </select>
+                <p>
+                <button type="button"onclick="validateAge();">Submit</button>
+            </div>
+        </div>
+        <noscript>
+            <div class="overlay failed">
+                <div class="box">
+                    <h1>❌ Access Denied</h1>
+                    <p>
+                    All salmon like running client-side code to view websites. If you do not have javascript enabled you are not a salmon.
+                </div>
+            </div>
+        </noscript>
+        <script>
+            window.addEventListener('DOMContentLoaded', (event) => {
+                document.querySelectorAll('.map').item(0).style.display = 'block';
+                document.querySelectorAll('.validation').item(0).style.display = 'block';
+            });
 
-      .map {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    </style>
-  </head>
-  <body>
-    <image src='images/salmon.png' class='map' />
-  </body>
+            function validateAge() {
+                var ageElement = document.getElementById('age-box');
+                var value = Number(ageElement.value);
+                if (value <= 11) {
+                    hideValidation();
+                } else {
+                    showAgeValidationFailed();
+                }
+            }
+
+            function hideValidation() {
+                document.querySelectorAll('.validation').item(0).style.display = 'none';
+            }
+
+            function showAgeValidationFailed() {
+                document.querySelectorAll('.validation').item(0).style.display = 'none';
+                document.querySelectorAll('.validation-age-failure').item(0).style.display = 'block';
+            }
+        </script>
+    </body>
 </html>
